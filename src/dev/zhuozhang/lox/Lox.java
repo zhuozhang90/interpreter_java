@@ -9,22 +9,23 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Lox {
-    static boolean hadError = false;
+    static boolean hadError = false; // flag. if error in script then don't execute
 
     public static void main(String[] args) throws IOException {
+        // arg count can only be 1 (file to fun) or 0 (repl)
         if (args.length > 1) {
             System.out.println("Usage: jlox [script]");
-            System.exit(64); ​
+            System.exit(64);
         } else if (args.length == 1) {
-            runFile(args[0]);
+            runFile(args[0]); // run script
         } else {
-            runPrompt();
+            runPrompt(); // run repl
         }
     }
 
     private static void runFile(String path) throws IOException {
-        byte[] bytes = Files.readAllBytes(Paths.get(path));
-        run(new String(bytes, Charset.defaultCharset()));
+        byte[] bytes = Files.readAllBytes(Paths.get(path)); // read all bytes of file
+        run(new String(bytes, Charset.defaultCharset())); // construct string out of those bytes
         if (hadError) System.exit(65);
 
     }
@@ -33,9 +34,9 @@ public class Lox {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
 
-        for (;;) { ​
+        for (;;) {
             System.out.print("> ");
-            run(reader.readLine());
+            run(reader.readLine()); // run each line from user input
             hadError = false;
         }
     }
@@ -48,6 +49,8 @@ public class Lox {
             System.out.println(token);
         }
     }
+
+    // error handling
     static void error(int line, String message) {
         report(line, "", message);
     }
